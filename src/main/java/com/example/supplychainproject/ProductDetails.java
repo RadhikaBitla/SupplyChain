@@ -76,4 +76,17 @@ public class ProductDetails
         return tablePane;
 
     }
+    public Product getSelectedProduct()
+    {
+        try {
+            Product selected = productTable.getSelectionModel().getSelectedItem();
+            return selected;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

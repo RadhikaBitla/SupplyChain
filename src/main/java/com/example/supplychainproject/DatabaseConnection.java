@@ -33,10 +33,21 @@ public class DatabaseConnection
             throw new RuntimeException(e);
         }
     }
+    public int executeUpdateQuery(String query)
+    {
+        Statement statement=getStatement();
+        try
+        {
+            return statement.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
     public  static  void main(String[] args)
     {
         DatabaseConnection databaseConnection=new DatabaseConnection();
-        ResultSet rs=databaseConnection.getQueryTable("select email,mobile from student");
+        ResultSet rs=databaseConnection.getQueryTable("select email,mobile from customer");
         try
         {
             while(rs.next())

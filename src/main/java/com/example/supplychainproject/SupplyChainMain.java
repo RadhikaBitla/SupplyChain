@@ -21,36 +21,50 @@ public class SupplyChainMain extends Application {
 
 public static int width=600, height=400, headerbar=50;
 public static Pane bodyPane = new Pane();
+
+TextField emailField=new TextField();
+    TextField searchArea=new TextField();
+    Button searchButton=new Button("Search");
+    public Pane root=new Pane();
+Label welcomeMessage=new Label();
     public GridPane headerBar()
     {
-        TextField searchArea=new TextField();
-        Button searchButton=new Button("Search");
 
         Button LoginButton=new Button("Login In");
 
         Button signInButton=new Button("Sign Up");
+
+        welcomeMessage.setText("Welcome user");
+        welcomeMessage.setTextFill(Color.WHITE);
+
         GridPane gridPane=new GridPane();
         gridPane.setHgap(20);
         gridPane.setMinSize(bodyPane.getMinWidth(),headerbar);
         gridPane.setAlignment(Pos.CENTER);
-        gridPane.setStyle("-fx-background-color:black;");
+        gridPane.setStyle("-fx-background-color:brown;");
         gridPane.add(LoginButton,0,0);
         gridPane.add(signInButton,1,0);
         gridPane.add(searchArea,2,0);
         gridPane.add(searchButton,3,0);
-
+        gridPane.add(welcomeMessage,4,0);
 
         LoginButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
+            public void handle(ActionEvent actionEvent)
+            {
+                root.getChildren().clear();
                 bodyPane.getChildren().add(loginPage());
+                root.getChildren().addAll(bodyPane,searchArea,searchButton,welcomeMessage);
+                welcomeMessage.setTextFill(Color.BLACK);
             }
         });
 
         signInButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                root.getChildren().clear();
                 bodyPane.getChildren().add(signPage());
+                root.getChildren().add(bodyPane);
             }
         });
 
@@ -60,7 +74,6 @@ public static Pane bodyPane = new Pane();
                 Product product=new Product();
                 bodyPane.getChildren().clear();
                 bodyPane.getChildren().add(productDetails.getProductsByName(searchArea.getText()));
-
             }
         });
         return gridPane;
@@ -73,10 +86,10 @@ public static Pane bodyPane = new Pane();
         Label email=new Label("Email");
         Label password=new Label("Password");
 
-        TextField emailField=new TextField();
+        emailField=new TextField();
         PasswordField passwordField=new PasswordField();
 
-        Button loginSubmit=new Button("Submit");
+        Button loginSubmit=new Button("Login In");
 
         Label messageLabel=new Label();
 
@@ -91,6 +104,8 @@ public static Pane bodyPane = new Pane();
         gridPane.add(passwordField,2,2);
         gridPane.add(loginSubmit,2,3);
         gridPane.add(messageLabel,2,4);
+
+        Product product=new Product();
         loginSubmit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -99,10 +114,55 @@ public static Pane bodyPane = new Pane();
 
                 if(loginPage.checking(email,password))
                 {
+                    String name=product.getUserName(email);
+                    name=name.substring(0,1).toUpperCase()+name.substring(1,name.length());
+                    welcomeMessage.setText("Welcome "+name);
+                    bodyPane.getChildren().add(productDetails.getAllProducts());
+                    root.getChildren().clear();
+                    root.getChildren().addAll(bodyPane,footerBar(),searchButton,searchArea,welcomeMessage);
                     messageLabel.setText("Login Succesfull");
                 }
                 else{
                     messageLabel.setText("Login Failed");
+                    messageLabel.setTextFill(Color.RED);
+                }
+
+            }
+        });
+
+        return gridPane;
+    }
+    public GridPane footerBar()
+    {
+        Button addToCart=new Button("Add to Cart");
+
+        Button buyNow=new Button("Buy Now");
+
+        Label indication=new Label();
+        GridPane gridPane=new GridPane();
+        gridPane.setHgap(20);
+        gridPane.setMinSize(bodyPane.getMinWidth(),headerbar);
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setStyle("-fx-background-color:brown;");
+        gridPane.add(addToCart,0,0);
+        gridPane.add(buyNow,1,0);
+        gridPane.add(indication,2,0);
+        gridPane.setTranslateY(height);
+        gridPane.setPrefSize(width,50);
+        buyNow.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                PlaceOrder placeOrder=new PlaceOrder();
+                boolean booking=placeOrder.ordering(emailField.getText(),productDetails.getSelectedProduct());
+                if(booking == true)
+                {
+                    indication.setText("Order Placed");
+                    indication.setTextFill(Color.GREEN);
+                }
+                else
+                {
+                    indication.setText("Order Failed");
+                    indication.setTextFill(Color.RED);
                 }
 
             }
@@ -160,10 +220,10 @@ public static Pane bodyPane = new Pane();
 ProductDetails productDetails=new ProductDetails();
     public Pane createContent()
     {
-        Pane root=new Pane();
+
         root.setPrefSize(width,height+headerbar);
 
-        bodyPane.setMinHeight(height);
+        bodyPane.setMinHeight(height-50);
         bodyPane.setMinWidth(width);
         bodyPane.setTranslateY(headerbar);
         bodyPane.getChildren().addAll(productDetails.getAllProducts());

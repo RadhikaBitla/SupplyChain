@@ -33,8 +33,8 @@ public class LoginPage
         }
         return encrypted;
     }
-    public boolean checking(String email, String mobile) {
-        String query = String.format("select email, mobile from student where email = '%s' and mobile='%s' ", email, mobile);
+    public boolean checking(String email, String password) {
+        String query = String.format("select email, mobile from customer where email = '%s' and password='%s' ", email, password);
         DatabaseConnection databaseConnection=new DatabaseConnection();
         ResultSet rs=databaseConnection.getQueryTable(query);
         try {

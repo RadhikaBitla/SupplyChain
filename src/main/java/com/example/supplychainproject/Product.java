@@ -75,4 +75,20 @@ public class Product
         }
         return data;
     }
+    public String getUserName(String email)
+    {
+        DatabaseConnection databaseConnection=new DatabaseConnection();
+        String query=String.format("select first_name from customer where email = '%s' ",email);
+        try
+        {
+            ResultSet rs=databaseConnection.getQueryTable(query);
+            if(rs!=null && rs.next())
+            {
+                return rs.getString("first_name");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return "";
+    }
 }
