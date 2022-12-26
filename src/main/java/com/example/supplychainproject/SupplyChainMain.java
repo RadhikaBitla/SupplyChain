@@ -1,6 +1,7 @@
 package com.example.supplychainproject;
 
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -19,7 +20,7 @@ import java.io.IOException;
 public class SupplyChainMain extends Application {
 
 public static int width=600, height=400, headerbar=50;
-Pane bodyPane = new Pane();
+public static Pane bodyPane = new Pane();
     public GridPane headerBar()
     {
         TextField searchArea=new TextField();
@@ -50,6 +51,16 @@ Pane bodyPane = new Pane();
             @Override
             public void handle(ActionEvent actionEvent) {
                 bodyPane.getChildren().add(signPage());
+            }
+        });
+
+        searchButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Product product=new Product();
+                bodyPane.getChildren().clear();
+                bodyPane.getChildren().add(productDetails.getProductsByName(searchArea.getText()));
+
             }
         });
         return gridPane;

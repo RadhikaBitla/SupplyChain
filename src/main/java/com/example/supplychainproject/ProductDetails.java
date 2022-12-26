@@ -23,15 +23,54 @@ public class ProductDetails
         TableColumn price=new TableColumn("Price");
         price.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-        ObservableList<Product> data= FXCollections.observableArrayList();
-        data.add(new Product(1,"lenova",8455));
-        data.add(new Product(2,"Redmi", 8000));
+        //ObservableList<Product> data= FXCollections.observableArrayList();
+        //data.add(new Product(1,"lenova",8455));
+        //data.add(new Product(2,"Redmi", 8000));
 
+        Product product=new Product();
+
+        ObservableList<Product> data=FXCollections.observableArrayList();
+        data= product.getAllProducts();
         productTable=new TableView<>();
         productTable.setItems(data);
         productTable.getColumns().addAll(id,name,price);
+        productTable.setMinSize(SupplyChainMain.width,SupplyChainMain.height);
+        productTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         Pane tablePane=new Pane();
+        tablePane.setStyle("-fx-background-color:black;");
+        tablePane.setMinSize(SupplyChainMain.width,SupplyChainMain.height);
+        tablePane.getChildren().addAll(productTable);
+
+        return tablePane;
+
+    }
+    public Pane getProductsByName(String Productname)
+    {
+        TableColumn id=new TableColumn("id");
+        id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        TableColumn name=new TableColumn("Name");
+        name.setCellValueFactory(new PropertyValueFactory<>("name"));
+        TableColumn price=new TableColumn("Price");
+        price.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        //ObservableList<Product> data= FXCollections.observableArrayList();
+        //data.add(new Product(1,"lenova",8455));
+        //data.add(new Product(2,"Redmi", 8000));
+
+        Product product=new Product();
+
+        ObservableList<Product> data=FXCollections.observableArrayList();
+        data= product.getProductsByName(Productname);
+        productTable=new TableView<>();
+        productTable.setItems(data);
+        productTable.getColumns().addAll(id,name,price);
+        productTable.setMinSize(SupplyChainMain.width,SupplyChainMain.height);
+        productTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        Pane tablePane=new Pane();
+        tablePane.setStyle("-fx-background-color:black;");
+        tablePane.setMinSize(SupplyChainMain.width,SupplyChainMain.height);
         tablePane.getChildren().addAll(productTable);
 
         return tablePane;
